@@ -58,11 +58,10 @@ class PredatorService {
     }
     
     func filter(type: APType) {
-        apexPredators = tempPredators
         if (type == .all) {
             apexPredators = tempPredators
         } else {
-            apexPredators = apexPredators.filter { predator in
+            apexPredators = tempPredators.filter { predator in
                 predator.type == type
             }
         }
