@@ -8,14 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
+    let predatorService = PredatorService()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        List(predatorService.apexPredators) { predator in
+            
+            HStack {
+                Image(predator.image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .shadow(color: .white, radius: 1)
+                
+                VStack(alignment: .leading) {
+                    Text(predator.name)
+                        .font(.title3)
+                    
+                    // Predator type chip
+                    Text(predator.type.rawValue.capitalized)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(predator.type.background)
+                        
+                        .clipShape(.capsule)
+                        
+                }
+            }
+        }.preferredColorScheme(.dark)
     }
 }
 
