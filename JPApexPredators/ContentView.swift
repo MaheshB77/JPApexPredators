@@ -11,16 +11,11 @@ struct ContentView: View {
     let predatorService = PredatorService()
 
     @State var searchStr = ""
+    @State var alpahabeticSort = false
 
     var filteredPredators: [ApexPredator] {
-        if searchStr.isEmpty {
-            return predatorService.apexPredators
-        } else {
-            return predatorService.apexPredators.filter {
-                predator in
-                predator.name.lowercased().contains(searchStr.lowercased())
-            }
-        }
+        predatorService.sort(alphabatically: alpahabeticSort)
+        return predatorService.search(searchStr: searchStr)
     }
 
     var body: some View {
@@ -52,11 +47,23 @@ struct ContentView: View {
                         }
                     }
                 }
-                .navigationTitle("Apex Predators")
-                .searchable(text: $searchStr, prompt: "Search Apex Predators")
-                .autocorrectionDisabled()
-                .animation(.default, value: searchStr)
-
+            }
+            .navigationTitle("Apex Predators")
+            .searchable(text: $searchStr, prompt: "Search Apex Predators")
+            .autocorrectionDisabled()
+            .animation(.default, value: searchStr)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        withAnimation {
+                            alpahabeticSort.toggle()
+                        }
+                    } label: {
+                        Image(
+                            systemName: alpahabeticSort ? "film" : "textformat"
+                        )
+                    }
+                }
             }
         }.preferredColorScheme(.dark)
     }

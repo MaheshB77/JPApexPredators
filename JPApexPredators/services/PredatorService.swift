@@ -32,4 +32,26 @@ class PredatorService {
             }
         }
     }
+
+    func search(searchStr: String) -> [ApexPredator] {
+        if searchStr.isEmpty {
+            return apexPredators
+        } else {
+            return apexPredators.filter {
+                predator in
+                predator.name.lowercased().contains(searchStr.lowercased())
+            }
+        }
+    }
+
+    func sort(alphabatically: Bool) {
+        apexPredators.sort { predator1, predator2 in
+            if alphabatically {
+                predator1.name < predator2.name
+            } else {
+                predator1.id < predator2.id
+            }
+        }
+
+    }
 }
