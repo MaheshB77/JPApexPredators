@@ -12,8 +12,10 @@ struct ContentView: View {
 
     @State var searchStr = ""
     @State var alpahabeticSort = false
+    @State var selectedType: APType = .all
 
     var filteredPredators: [ApexPredator] {
+        predatorService.filter(type: selectedType)
         predatorService.sort(alphabatically: alpahabeticSort)
         return predatorService.search(searchStr: searchStr)
     }
@@ -52,6 +54,7 @@ struct ContentView: View {
             .searchable(text: $searchStr, prompt: "Search Apex Predators")
             .autocorrectionDisabled()
             .animation(.default, value: searchStr)
+            .animation(.default, value: selectedType)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -62,6 +65,22 @@ struct ContentView: View {
                         Image(
                             systemName: alpahabeticSort ? "film" : "textformat"
                         )
+                    }
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+
+                        Picker("Filter", selection: $selectedType) {
+                            ForEach(APType.allCases) { type in
+                                Label(
+                                    type.rawValue.capitalized,
+                                    systemImage: type.icon
+                                )
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
                     }
                 }
             }

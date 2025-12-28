@@ -9,9 +9,11 @@ import Foundation
 
 class PredatorService {
     var apexPredators: [ApexPredator] = []
+    var tempPredators: [ApexPredator] = []
 
     init() {
         decodePredators()
+        tempPredators = apexPredators
     }
 
     func decodePredators() {
@@ -53,5 +55,16 @@ class PredatorService {
             }
         }
 
+    }
+    
+    func filter(type: APType) {
+        apexPredators = tempPredators
+        if (type == .all) {
+            apexPredators = tempPredators
+        } else {
+            apexPredators = apexPredators.filter { predator in
+                predator.type == type
+            }
+        }
     }
 }
