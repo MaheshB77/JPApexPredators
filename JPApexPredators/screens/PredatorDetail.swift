@@ -11,6 +11,7 @@ import SwiftUI
 struct PredatorDetail: View {
     var predator: ApexPredator
     @State var position: MapCameraPosition
+    @Namespace var namespace
 
     var body: some View {
         GeometryReader { geo in
@@ -55,14 +56,19 @@ struct PredatorDetail: View {
 
                     // Current location
                     NavigationLink {
-
-                        VStack {
-                            Image(predator.image)
-                                .resizable()
-                                .scaledToFit()
-                        }
-                        .navigationTitle(predator.name)
-                        .navigationBarTitleDisplayMode(.inline)
+                        PredatorMap(
+                            position: .camera(
+                                MapCamera(
+                                    centerCoordinate: predator.location,
+                                    distance: 1000,
+                                    heading: 250,
+                                    pitch: 80
+                                )
+                            )
+                        )
+                        .navigationTransition(
+                            .zoom(sourceID: 1, in: namespace)
+                        )
 
                     } label: {
                         Map(position: $position) {
@@ -86,7 +92,8 @@ struct PredatorDetail: View {
                                 .clipShape(.rect(bottomTrailingRadius: 12))
                         }
                         .clipShape(.rect(cornerRadius: 12))
-                        .allowsHitTesting(false)    // Used to prevent the map interaction
+                        .allowsHitTesting(false)  // Used to prevent the map interaction
+                        .matchedTransitionSource(id: 1, in: namespace)
                     }
 
                     // Appears in
