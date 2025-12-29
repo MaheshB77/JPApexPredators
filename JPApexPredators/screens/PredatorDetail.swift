@@ -18,6 +18,19 @@ struct PredatorDetail: View {
                     Image(predator.type.rawValue)
                         .resizable()
                         .scaledToFill()
+                        .overlay {
+                            LinearGradient(
+                                stops: [
+                                    .init(
+                                        color: .clear,
+                                        location: 0.8
+                                    ),
+                                    .init(color: .black, location: 1),
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        }
 
                     // Dino image
 
@@ -31,6 +44,7 @@ struct PredatorDetail: View {
                         )
                         .scaleEffect(x: -1)
                         .shadow(color: .black, radius: 8)
+
                 }
 
                 VStack(alignment: .leading) {
@@ -68,6 +82,7 @@ struct PredatorDetail: View {
                         destination: URL(string: predator.link)!
                     )
                     .font(.caption)
+                    .foregroundStyle(.blue)
 
                 }
                 .padding()
@@ -80,5 +95,6 @@ struct PredatorDetail: View {
 }
 
 #Preview {
-    PredatorDetail(predator: PredatorService().apexPredators[2])
+    PredatorDetail(predator: PredatorService().apexPredators[7])
+        .preferredColorScheme(.dark)
 }
