@@ -5,10 +5,12 @@
 //  Created by Mahesh Bansode on 29/12/25.
 //
 
+import MapKit
 import SwiftUI
 
 struct PredatorDetail: View {
     var predator: ApexPredator
+    @State var position: MapCameraPosition
 
     var body: some View {
         GeometryReader { geo in
@@ -52,6 +54,40 @@ struct PredatorDetail: View {
                         .font(.largeTitle)
 
                     // Current location
+                    NavigationLink {
+
+                        VStack {
+                            Image(predator.image)
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        .navigationTitle(predator.name)
+                        .navigationBarTitleDisplayMode(.inline)
+
+                    } label: {
+                        Map(position: $position) {
+                            Annotation(
+                                predator.name,
+                                coordinate: predator.location
+                            ) {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .font(.largeTitle)
+                                    .symbolEffect(.pulse)
+                            }
+                            .annotationTitles(.hidden)
+                        }
+                        .frame(height: 120)
+                        .clipShape(.rect(cornerRadius: 12))
+                        .overlay(alignment: .topLeading) {
+                            Text("Current Location")
+                                .padding([.bottom, .leading, .trailing], 8)
+                                .padding(.top, 4)
+                                .background(.black.opacity(0.5))
+                                .clipShape(.rect(bottomTrailingRadius: 12))
+                        }
+                        .clipShape(.rect(cornerRadius: 12))
+                        .allowsHitTesting(false)    // Used to prevent the map interaction
+                    }
 
                     // Appears in
                     Text("Apprears in : ")
@@ -90,11 +126,25 @@ struct PredatorDetail: View {
                 .frame(width: geo.size.width, alignment: .leading)
             }
             .padding(.bottom)
-        }.ignoresSafeArea()
+        }
+        .ignoresSafeArea()
+        .toolbarBackground(.automatic)
     }
 }
 
 #Preview {
-    PredatorDetail(predator: PredatorService().apexPredators[7])
+    let predator = PredatorService().apexPredators[7]
+    NavigationStack {
+        PredatorDetail(
+            predator: predator,
+            position: .camera(
+                MapCamera(
+                    centerCoordinate: predator.location,
+                    distance: 30000
+                )
+            )
+        )
         .preferredColorScheme(.dark)
+    }
+
 }
