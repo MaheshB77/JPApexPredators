@@ -24,25 +24,57 @@ struct PredatorDetail: View {
                     Image(predator.image)
                         .resizable()
                         .scaledToFill()
+                        .offset(y: 20)
                         .frame(
                             width: geo.size.width / 1.5,
-                            height: geo.size.width / 3.6
+                            height: geo.size.width / 2
                         )
                         .scaleEffect(x: -1)
                         .shadow(color: .black, radius: 8)
                 }
 
-                // Dino name
+                VStack(alignment: .leading) {
+                    Text(predator.name)
+                        .font(.largeTitle)
 
-                // Current location
+                    // Current location
 
-                // Appears in
+                    // Appears in
+                    Text("Apprears in : ")
+                        .font(.title3)
+                        .padding(.top, 4)
+                    ForEach(predator.movies, id: \.self) { movie in
+                        Text("⦿ " + movie)
+                            .font(.subheadline)
+                    }
 
-                // Movie moments
+                    // Movie moments
+                    Text("Movie Moments")
+                        .font(.title3)
+                        .padding(.top, 8)
+                    ForEach(predator.movieScenes) { scene in
+                        Text(scene.movie)
+                            .font(.headline)
 
-                // Link to webpage
+                        Text(scene.sceneDescription)
+                            .padding(.bottom)
+                    }
 
+                    // Link to webpage
+                    Text("Read more")
+                        .font(.caption)
+                    Link(
+                        predator.link,
+                        destination: URL(string: predator.link)!
+                    )
+                    .font(.caption)
+
+                }
+                .padding()
+                .padding(.top)
+                .frame(width: geo.size.width, alignment: .leading)
             }
+            .padding(.bottom)
         }.ignoresSafeArea()
     }
 }
